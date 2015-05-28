@@ -3,7 +3,7 @@
 //! # Examples
 //!
 //!
-//! ## HOTP
+//! ## HOTP example
 //! ```
 //! extern crate otpauth;
 //!
@@ -14,7 +14,7 @@
 //! }
 //! ```
 //!
-//! ## TOTP
+//! ## TOTP example
 //!
 //! ```
 //! extern crate otpauth;
@@ -57,8 +57,9 @@ impl OtpAuth {
     ///
     /// A TOTP code is an extension of HOTP algorithm.
     ///
-    /// param ``period``: A period that a TOTP code is valid in seconds
-    /// param ``timestamp``: Create TOTP at this given timestamp
+    /// ``period``: A period that a TOTP code is valid in seconds
+    ///
+    /// ``timestamp``: Create TOTP at this given timestamp
     pub fn totp(&self, period: usize, timestamp: usize) -> u32 {
         let counter = timestamp / period;
         self.hotp(counter)
@@ -66,7 +67,7 @@ impl OtpAuth {
 
     /// Generate a HOTP code.
     ///
-    /// param ``counter``: HOTP is a counter based algorithm.
+    /// ``counter``: HOTP is a counter based algorithm.
     pub fn hotp(&self, counter: usize) -> u32 {
         // Init Hmac
         let key = self.secret.clone().into_bytes();
@@ -88,9 +89,11 @@ impl OtpAuth {
 
     /// Valid a TOTP code.
     ///
-    /// param ``code``: A number that is less than 6 characters.
-    /// param ``period``: A period that a TOTP code is valid in seconds
-    /// param ``timestamp``: Validate TOTP at this given timestamp
+    /// ``code``: A number that is less than 6 characters.
+    ///
+    /// ``period``: A period that a TOTP code is valid in seconds
+    ///
+    /// ``timestamp``: Validate TOTP at this given timestamp
     pub fn valid_totp(&self, code: u32, period: usize, timestamp: usize) -> bool {
         let code_str = code.to_string();
         let code_bytes = code_str.as_bytes();
@@ -113,9 +116,11 @@ impl OtpAuth {
 
     /// Valid a HOTP code.
     ///
-    /// param ``code``: A number that is less than 6 characters.
-    /// param ``last``: Guess HOTP code from last + 1 range.
-    /// param ``trials``: Guest HOTP code end at last + trials + 1.
+    /// ``code``: A number that is less than 6 characters.
+    ///
+    /// ``last``: Guess HOTP code from last + 1 range.
+    ///
+    /// ``trials``: Guest HOTP code end at last + trials + 1.
     pub fn valid_hotp(&self, code: u32, last: usize, trials: usize) -> bool {
         let code_str = code.to_string();
         let code_bytes = code_str.as_bytes();
