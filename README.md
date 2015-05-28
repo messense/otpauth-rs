@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/messense/otpauth-rs.svg)](https://travis-ci.org/messense/otpauth-rs)
 [![Coverage Status](https://coveralls.io/repos/messense/otpauth-rs/badge.svg)](https://coveralls.io/r/messense/otpauth-rs)
-[![Crates.io](https://img.shields.io/crates/v/opencc.svg)](https://crates.io/crates/opencc)
+[![Crates.io](https://img.shields.io/crates/v/otpauth.svg)](https://crates.io/crates/otpauth)
 
 Two-step verification of HOTP/TOTP for Rust.
 
