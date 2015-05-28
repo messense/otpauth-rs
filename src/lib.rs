@@ -106,9 +106,7 @@ impl OtpAuth {
             return false;
         }
         let mut rv = 0;
-        for index in 0..code_bytes.len() {
-            let a = code_bytes[index];
-            let b = valid_bytes[index];
+        for (a, b) in code_bytes.iter().zip(valid_bytes.iter()) {
             rv |= a ^ b;
         }
         rv == 0
