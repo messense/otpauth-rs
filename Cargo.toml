@@ -1,0 +1,19 @@
+[package]
+name = "otpauth"
+version = "0.1.0"
+authors = ["messense <messense@icloud.com>"]
+description = "Two-step verification of HOTP/TOTP for Rust"
+repository = "https://github.com/messense/otpauth-rs"
+homepage = "https://github.com/messense/otpauth-rs"
+documentation = "https://messense.github.io/otpauth-rs"
+readme = "README.md"
+keywords = ["otp", "auth", "password"]
+license = "MIT"
+
+[dependencies]
+byteorder = "*"
+rust-crypto = "*"
+time = "*"
+
+[features]
+unstable = []
