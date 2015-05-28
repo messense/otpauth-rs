@@ -116,9 +116,9 @@ impl OtpAuth {
     ///
     /// ``code``: A number that is less than 6 characters.
     ///
-    /// ``last``: Guess HOTP code from last + 1 range.
+    /// ``last``: Guess HOTP code from ``last + 1`` range.
     ///
-    /// ``trials``: Guest HOTP code end at last + trials + 1.
+    /// ``trials``: Guest HOTP code end at ``last + trials + 1``.
     pub fn valid_hotp(&self, code: u32, last: usize, trials: usize) -> bool {
         let code_str = code.to_string();
         let code_bytes = code_str.as_bytes();
