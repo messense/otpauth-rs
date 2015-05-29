@@ -62,7 +62,7 @@ impl HOTP {
     ///
     /// ``last``: Guess HOTP code from ``last + 1`` range.
     ///
-    /// ``trials``: Guest HOTP code end at ``last + trials + 1``.
+    /// ``trials``: Guess HOTP code end at ``last + trials + 1``.
     pub fn verify(&self, code: u32, last: usize, trials: usize) -> bool {
         let code_str = code.to_string();
         let code_bytes = code_str.as_bytes();
