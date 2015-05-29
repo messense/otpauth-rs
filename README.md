@@ -24,12 +24,12 @@ Add ``extern crate otpauth`` to your crate root and your're good to go!
 ```rust
 extern crate otpauth;
 
-use otpauth::OtpAuth;
+use otpauth::HOTP;
 
 fn main() {
-    let auth = OtpAuth::new("python");
-    let code = auth.hotp(4);
-    assert_eq!(true, auth.valid_hotp(code, 0, 100));
+    let auth = HOTP::new("python");
+    let code = auth.generate(4);
+    assert_eq!(true, auth.verify(code, 0, 100));
 }
 ```
 
@@ -39,14 +39,14 @@ fn main() {
 extern crate otpauth;
 extern crate time;
 
-use otpauth::OtpAuth;
+use otpauth::TOTP;
 
 fn main() {
-    let auth = OtpAuth::new("python");
+    let auth = TOTP::new("python");
     let timestamp1 = time::now().to_timespec().sec as usize;
-    let code = auth.totp(30usize, timestamp1);
+    let code = auth.generate(30usize, timestamp1);
     let timestamp2 = time::now().to_timespec().sec as usize;
-    assert_eq!(true, auth.valid_totp(code, 30usize, timestamp2));
+    assert_eq!(true, auth.verify(code, 30usize, timestamp2));
 }
 ```
 
