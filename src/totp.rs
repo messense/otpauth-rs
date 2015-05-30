@@ -1,5 +1,19 @@
 //! Two-step verification of TOTP algorithm
 //!
+//! # Example
+//!
+//! ```
+//! extern crate otpauth;
+//! extern crate time;
+//!
+//! fn main() {
+//!     let auth = otpauth::TOTP::new("python");
+//!     let timestamp1 = time::now().to_timespec().sec as usize;
+//!     let code = auth.generate(30, timestamp1);
+//!     let timestamp2 = time::now().to_timespec().sec as usize;
+//!     assert_eq!(true, auth.verify(code, 30, timestamp2));
+//! }
+//!
 use super::hotp;
 
 
@@ -9,7 +23,7 @@ pub struct TOTP {
 }
 
 impl TOTP {
-    /// Constructs a new `OtpAuth`
+    /// Constructs a new `TOTP`
     pub fn new(secret: &str) -> TOTP {
         TOTP {
             secret: secret.to_string(),

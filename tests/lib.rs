@@ -13,10 +13,10 @@ fn test_hotp() {
 fn test_totp() {
     let auth = otpauth::TOTP::new("python");
     let timestamp1 = time::now().to_timespec().sec as usize;
-    let code = auth.generate(30usize, timestamp1);
+    let code = auth.generate(30, timestamp1);
     let timestamp2 = time::now().to_timespec().sec as usize;
-    assert_eq!(true, auth.verify(code, 30usize, timestamp2));
-    assert_eq!(false, auth.verify(123456, 30usize, timestamp2));
+    assert_eq!(true, auth.verify(code, 30, timestamp2));
+    assert_eq!(false, auth.verify(123456, 30, timestamp2));
 }
 
 #[test]
