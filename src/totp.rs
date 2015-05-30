@@ -13,6 +13,7 @@
 //!     let timestamp2 = time::now().to_timespec().sec as usize;
 //!     assert_eq!(true, auth.verify(code, 30, timestamp2));
 //! }
+//! ```
 //!
 use super::hotp;
 
