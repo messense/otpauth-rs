@@ -5,8 +5,8 @@ extern crate time;
 fn test_hotp() {
     let auth = otpauth::HOTP::new("python");
     let code = auth.generate(4);
-    assert_eq!(true, auth.verify(code, 0, 100));
-    assert_eq!(false, auth.verify(123456, 0, 100));
+    assert!(auth.verify(code, 0, 100));
+    assert!(!auth.verify(123456, 0, 100));
 }
 
 #[test]
@@ -15,8 +15,8 @@ fn test_totp() {
     let timestamp1 = time::now().to_timespec().sec as usize;
     let code = auth.generate(30, timestamp1);
     let timestamp2 = time::now().to_timespec().sec as usize;
-    assert_eq!(true, auth.verify(code, 30, timestamp2));
-    assert_eq!(false, auth.verify(123456, 30, timestamp2));
+    assert!(auth.verify(code, 30, timestamp2));
+    assert!(!auth.verify(123456, 30, timestamp2));
 }
 
 #[test]

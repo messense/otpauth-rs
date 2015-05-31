@@ -8,7 +8,7 @@
 //! fn main() {
 //!     let auth = otpauth::HOTP::new("python");
 //!     let code = auth.generate(4);
-//!     assert_eq!(true, auth.verify(code, 0, 100));
+//!     assert!(auth.verify(code, 0, 100));
 //! }
 //! ```
 //!

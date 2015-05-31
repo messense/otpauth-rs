@@ -11,7 +11,7 @@
 //!     let timestamp1 = time::now().to_timespec().sec as usize;
 //!     let code = auth.generate(30, timestamp1);
 //!     let timestamp2 = time::now().to_timespec().sec as usize;
-//!     assert_eq!(true, auth.verify(code, 30, timestamp2));
+//!     assert!(auth.verify(code, 30, timestamp2));
 //! }
 //! ```
 //!
