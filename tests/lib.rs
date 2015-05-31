@@ -7,6 +7,7 @@ fn test_hotp() {
     let code = auth.generate(4);
     assert!(auth.verify(code, 0, 100));
     assert!(!auth.verify(123456, 0, 100));
+    assert!(!auth.verify(1234567, 0, 100));
 }
 
 #[test]
@@ -17,6 +18,7 @@ fn test_totp() {
     let timestamp2 = time::now().to_timespec().sec as usize;
     assert!(auth.verify(code, 30, timestamp2));
     assert!(!auth.verify(123456, 30, timestamp2));
+    assert!(!auth.verify(1234567, 30, timestamp2));
 }
 
 #[test]
