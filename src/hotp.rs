@@ -21,6 +21,7 @@ use crypto::sha1::Sha1;
 use byteorder::{BigEndian, WriteBytesExt, ReadBytesExt};
 
 
+#[derive(Debug)]
 pub struct HOTP {
     /// A secret token for the authentication
     pub secret: String,

@@ -18,6 +18,7 @@
 use super::hotp;
 
 
+#[derive(Debug)]
 pub struct TOTP {
     /// A secret token for the authentication
     pub secret: String,
