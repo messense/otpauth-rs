@@ -1,6 +1,7 @@
 # otpauth-rs
 
 [![Build Status](https://travis-ci.org/messense/otpauth-rs.svg)](https://travis-ci.org/messense/otpauth-rs)
+[![Build status](https://ci.appveyor.com/api/projects/status/2kg380h0l0c4li9o/branch/master?svg=true)](https://ci.appveyor.com/project/messense/otpauth-rs/branch/master)
 [![Coverage Status](https://coveralls.io/repos/messense/otpauth-rs/badge.svg)](https://coveralls.io/r/messense/otpauth-rs)
 [![Crates.io](https://img.shields.io/crates/v/otpauth.svg)](https://crates.io/crates/otpauth)
 
