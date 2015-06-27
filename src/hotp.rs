@@ -21,7 +21,7 @@ use crypto::sha1::Sha1;
 use byteorder::{BigEndian, WriteBytesExt, ReadBytesExt};
 
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub struct HOTP {
     /// A secret token for the authentication
     pub secret: String,
@@ -31,7 +31,7 @@ impl HOTP {
     /// Constructs a new `HOTP`
     pub fn new(secret: &str) -> HOTP {
         HOTP {
-            secret: secret.to_string(),
+            secret: secret.to_owned(),
         }
     }
 

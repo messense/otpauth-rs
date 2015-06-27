@@ -18,7 +18,7 @@
 use super::hotp;
 
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub struct TOTP {
     /// A secret token for the authentication
     pub secret: String,
@@ -28,7 +28,7 @@ impl TOTP {
     /// Constructs a new `TOTP`
     pub fn new(secret: &str) -> TOTP {
         TOTP {
-            secret: secret.to_string(),
+            secret: secret.to_owned(),
         }
     }
 
@@ -41,7 +41,7 @@ impl TOTP {
     /// ``timestamp``: Create TOTP at this given timestamp
     pub fn generate(&self, period: usize, timestamp: usize) -> u32 {
         let counter = timestamp / period;
-        let hotp_auth = hotp::HOTP::new(&self.secret[..]);
+        let hotp_auth = hotp::HOTP::new(&self.secret);
         hotp_auth.generate(counter)
     }
 
