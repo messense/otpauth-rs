@@ -29,9 +29,9 @@ pub struct HOTP {
 
 impl HOTP {
     /// Constructs a new `HOTP`
-    pub fn new(secret: &str) -> HOTP {
+    pub fn new<S: Into<String>>(secret: S) -> HOTP {
         HOTP {
-            secret: secret.to_owned(),
+            secret: secret.into(),
         }
     }
 
@@ -94,11 +94,11 @@ impl HOTP {
     /// ``issuer``: The company, the organization or something else.
     ///
     /// ``counter``: Counter of the HOTP algorithm.
-    pub fn to_uri(&self, label: &str, issuer: &str, counter: usize) -> String {
+    pub fn to_uri<S: AsRef<str>>(&self, label: S, issuer: S, counter: usize) -> String {
         use base32::encode;
         use base32::Alphabet::RFC4648;
 
         let encoded_secret = encode(RFC4648 { padding: false }, self.secret.as_bytes());
-        format!("otpauth://hotp/{}?secret={}&issuer={}&counter={}", label, encoded_secret, issuer, counter)
+        format!("otpauth://hotp/{}?secret={}&issuer={}&counter={}", label.as_ref(), encoded_secret, issuer.as_ref(), counter)
     }
 }

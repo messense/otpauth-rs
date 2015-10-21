@@ -26,9 +26,9 @@ pub struct TOTP {
 
 impl TOTP {
     /// Constructs a new `TOTP`
-    pub fn new(secret: &str) -> TOTP {
+    pub fn new<S: Into<String>>(secret: S) -> TOTP {
         TOTP {
-            secret: secret.to_owned(),
+            secret: secret.into(),
         }
     }
 
@@ -41,7 +41,7 @@ impl TOTP {
     /// ``timestamp``: Create TOTP at this given timestamp
     pub fn generate(&self, period: usize, timestamp: usize) -> u32 {
         let counter = timestamp / period;
-        let hotp_auth = hotp::HOTP::new(&self.secret);
+        let hotp_auth = hotp::HOTP::new(&self.secret[..]);
         hotp_auth.generate(counter)
     }
 
@@ -75,11 +75,11 @@ impl TOTP {
     /// ``label``: Label of the identifier.
     ///
     /// ``issuer``: The company, the organization or something else.
-    pub fn to_uri(&self, label: &str, issuer: &str) -> String {
+    pub fn to_uri<S: AsRef<str>>(&self, label: S, issuer: S) -> String {
         use base32::encode;
         use base32::Alphabet::RFC4648;
 
         let encoded_secret = encode(RFC4648 { padding: false }, self.secret.as_bytes());
-        format!("otpauth://totp/{}?secret={}&issuer={}", label, encoded_secret, issuer)
+        format!("otpauth://totp/{}?secret={}&issuer={}", label.as_ref(), encoded_secret, issuer.as_ref())
     }
 }
