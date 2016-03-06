@@ -18,6 +18,7 @@
 use super::hotp;
 
 
+/// Two-step verification of TOTP algorithm
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct TOTP {
     /// A secret token for the authentication
@@ -27,9 +28,7 @@ pub struct TOTP {
 impl TOTP {
     /// Constructs a new `TOTP`
     pub fn new<S: Into<String>>(secret: S) -> TOTP {
-        TOTP {
-            secret: secret.into(),
-        }
+        TOTP { secret: secret.into() }
     }
 
     /// Generate a TOTP code.
@@ -80,6 +79,9 @@ impl TOTP {
         use base32::Alphabet::RFC4648;
 
         let encoded_secret = encode(RFC4648 { padding: false }, self.secret.as_bytes());
-        format!("otpauth://totp/{}?secret={}&issuer={}", label.as_ref(), encoded_secret, issuer.as_ref())
+        format!("otpauth://totp/{}?secret={}&issuer={}",
+                label.as_ref(),
+                encoded_secret,
+                issuer.as_ref())
     }
 }

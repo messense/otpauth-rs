@@ -21,6 +21,7 @@ use crypto::sha1::Sha1;
 use byteorder::{BigEndian, WriteBytesExt, ReadBytesExt};
 
 
+/// Two-step verfication of HOTP algorithm.
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct HOTP {
     /// A secret token for the authentication
@@ -30,9 +31,7 @@ pub struct HOTP {
 impl HOTP {
     /// Constructs a new `HOTP`
     pub fn new<S: Into<String>>(secret: S) -> HOTP {
-        HOTP {
-            secret: secret.into(),
-        }
+        HOTP { secret: secret.into() }
     }
 
     /// Generate a HOTP code.
@@ -52,7 +51,7 @@ impl HOTP {
         let digest = result.code();
         let ob = digest[19];
         let pos: usize = (ob & 15) as usize;
-        let mut rdr = Cursor::new(digest[pos..pos+4].to_vec());
+        let mut rdr = Cursor::new(digest[pos..pos + 4].to_vec());
         let base = rdr.read_u32::<BigEndian>().unwrap() & 0x7fffffff;
         base % 1000000
     }
@@ -70,7 +69,7 @@ impl HOTP {
         if code_bytes.len() > 6 {
             return false;
         }
-        for i in last+1..last+trials+1 {
+        for i in last + 1..last + trials + 1 {
             let valid_code = self.generate(i).to_string();
             let valid_bytes = valid_code.as_bytes();
             if code_bytes.len() != valid_code.len() {
@@ -81,7 +80,7 @@ impl HOTP {
                 rv |= a ^ b;
             }
             if rv == 0 {
-                return true;        
+                return true;
             }
         }
         false
@@ -99,6 +98,10 @@ impl HOTP {
         use base32::Alphabet::RFC4648;
 
         let encoded_secret = encode(RFC4648 { padding: false }, self.secret.as_bytes());
-        format!("otpauth://hotp/{}?secret={}&issuer={}&counter={}", label.as_ref(), encoded_secret, issuer.as_ref(), counter)
+        format!("otpauth://hotp/{}?secret={}&issuer={}&counter={}",
+                label.as_ref(),
+                encoded_secret,
+                issuer.as_ref(),
+                counter)
     }
 }
