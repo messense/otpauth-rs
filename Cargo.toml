@@ -8,7 +8,7 @@ license = "MIT"
 name = "otpauth"
 readme = "README.md"
 repository = "https://github.com/messense/otpauth-rs"
-version = "0.2.4"
+version = "0.2.5"
 
 [dependencies]
 base32 = "0.3"
