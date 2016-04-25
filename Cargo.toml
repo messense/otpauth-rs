@@ -12,7 +12,7 @@ version = "0.2.4"
 
 [dependencies]
 base32 = "0.3"
-byteorder = "0.4"
+byteorder = "0.5"
 rust-crypto = "0.2"
 
 [dependencies.clippy]
