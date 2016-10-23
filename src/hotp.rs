@@ -14,7 +14,6 @@
 //!
 use std::io::Cursor;
 
-use crypto::digest::Digest;
 use crypto::mac::Mac;
 use crypto::hmac::Hmac;
 use crypto::sha1::Sha1;
