@@ -51,8 +51,8 @@ impl HOTP {
         let ob = digest[19];
         let pos: usize = (ob & 15) as usize;
         let mut rdr = Cursor::new(digest[pos..pos + 4].to_vec());
-        let base = rdr.read_u32::<BigEndian>().unwrap() & 0x7fffffff;
-        base % 1000000
+        let base = rdr.read_u32::<BigEndian>().unwrap() & 0x7fff_ffff;
+        base % 1_000_000
     }
 
     /// Valid a HOTP code.
