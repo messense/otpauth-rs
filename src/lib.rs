@@ -44,11 +44,6 @@
 //! }
 //! ```
 
-#![cfg_attr(feature="clippy", feature(plugin))]
-#![cfg_attr(feature="clippy", plugin(clippy))]
-#![cfg_attr(feature="clippy", deny(clippy))]
-#![cfg_attr(feature="clippy", warn(cyclomatic_complexity))]
-
 extern crate crypto;
 extern crate byteorder;
 extern crate base32;

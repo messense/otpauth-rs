@@ -11,13 +11,9 @@ repository = "https://github.com/messense/otpauth-rs"
 version = "0.2.6"
 
 [dependencies]
-base32 = "0.3"
+base32 = "0.4"
 byteorder = "1.0"
 rust-crypto = "0.2"
-
-[dependencies.clippy]
-optional = true
-version = "^0.*"
 
 [dev-dependencies]
 time = "0.1"

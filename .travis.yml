@@ -14,12 +14,7 @@ rust:
 before_script:
   - pip install 'travis-cargo<0.2' --user && export PATH=$HOME/.local/bin:$PATH
 script:
-  - |
-      if [ "$TRAVIS_RUST_VERSION" = nightly ]; then
-          travis-cargo build -- --features clippy
-      else
-          travis-cargo build
-      fi
+  - travis-cargo build
   - travis-cargo test
   - travis-cargo --only stable doc
 after_success:
