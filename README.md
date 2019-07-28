@@ -21,9 +21,8 @@ otpauth = "0.3"
 ### HOTP example
 
 ```rust
-extern crate otpauth;
-
 use otpauth::HOTP;
+
 
 fn main() {
     let auth = HOTP::new("python");
