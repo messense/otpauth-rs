@@ -6,10 +6,8 @@
 //!
 //! ```toml
 //! [dependencies]
-//! otpauth = "0.2"
+//! otpauth = "0.3"
 //! ```
-//!
-//! Add ``extern crate otpauth`` to your crate root and your're good to go!
 //!
 //! # Examples
 //!
@@ -37,9 +35,9 @@
 //!
 //! fn main() {
 //!     let auth = TOTP::new("python");
-//!     let timestamp1 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() as usize;
+//!     let timestamp1 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
 //!     let code = auth.generate(30, timestamp1);
-//!     let timestamp2 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() as usize;
+//!     let timestamp2 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
 //!     assert_eq!(true, auth.verify(code, 30, timestamp2));
 //! }
 //! ```

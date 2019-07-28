@@ -8,9 +8,9 @@
 //!
 //! fn main() {
 //!     let auth = otpauth::TOTP::new("python");
-//!     let timestamp1 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() as usize;
+//!     let timestamp1 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
 //!     let code = auth.generate(30, timestamp1);
-//!     let timestamp2 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() as usize;
+//!     let timestamp2 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
 //!     assert!(auth.verify(code, 30, timestamp2));
 //! }
 //! ```
@@ -40,7 +40,7 @@ impl TOTP {
     /// ``period``: A period that a TOTP code is valid in seconds
     ///
     /// ``timestamp``: Create TOTP at this given timestamp
-    pub fn generate(&self, period: usize, timestamp: usize) -> u32 {
+    pub fn generate(&self, period: u64, timestamp: u64) -> u32 {
         let counter = timestamp / period;
         let hotp_auth = hotp::HOTP::new(&self.secret[..]);
         hotp_auth.generate(counter)
@@ -53,7 +53,7 @@ impl TOTP {
     /// ``period``: A period that a TOTP code is valid in seconds
     ///
     /// ``timestamp``: Validate TOTP at this given timestamp
-    pub fn verify(&self, code: u32, period: usize, timestamp: usize) -> bool {
+    pub fn verify(&self, code: u32, period: u64, timestamp: u64) -> bool {
         let code_str = code.to_string();
         let code_bytes = code_str.as_bytes();
         if code_bytes.len() > 6 {

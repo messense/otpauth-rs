@@ -35,13 +35,13 @@ impl HOTP {
     /// Generate a HOTP code.
     ///
     /// ``counter``: HOTP is a counter based algorithm.
-    pub fn generate(&self, counter: usize) -> u32 {
+    pub fn generate(&self, counter: u64) -> u32 {
         let key = hmac::SigningKey::new(&digest::SHA1, self.secret.as_bytes());
-        let wtr = (counter as u64).to_be_bytes().to_vec();
+        let wtr = counter.to_be_bytes().to_vec();
         let result = hmac::sign(&key, &wtr);
         let digest = result.as_ref();
         let ob = digest[19];
-        let pos: usize = (ob & 15) as usize;
+        let pos = (ob & 15) as usize;
         let mut rdr = Cursor::new(digest[pos..pos + 4].to_vec());
         let base = rdr.read_u32::<BigEndian>().unwrap() & 0x7fff_ffff;
         base % 1_000_000
@@ -54,7 +54,7 @@ impl HOTP {
     /// ``last``: Guess HOTP code from ``last + 1`` range.
     ///
     /// ``trials``: Guess HOTP code end at ``last + trials + 1``.
-    pub fn verify(&self, code: u32, last: usize, trials: usize) -> bool {
+    pub fn verify(&self, code: u32, last: u64, trials: u64) -> bool {
         let code_str = code.to_string();
         let code_bytes = code_str.as_bytes();
         if code_bytes.len() > 6 {
@@ -84,7 +84,7 @@ impl HOTP {
     /// ``issuer``: The company, the organization or something else.
     ///
     /// ``counter``: Counter of the HOTP algorithm.
-    pub fn to_uri<S: AsRef<str>>(&self, label: S, issuer: S, counter: usize) -> String {
+    pub fn to_uri<S: AsRef<str>>(&self, label: S, issuer: S, counter: u64) -> String {
 
         let encoded_secret = base32::encode(RFC4648 { padding: false }, self.secret.as_bytes());
         format!("otpauth://hotp/{}?secret={}&issuer={}&counter={}",
