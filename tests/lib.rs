@@ -1,5 +1,4 @@
-extern crate otpauth;
-extern crate time;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 #[test]
 fn test_hotp() {
@@ -13,9 +12,9 @@ fn test_hotp() {
 #[test]
 fn test_totp() {
     let auth = otpauth::TOTP::new("python");
-    let timestamp1 = time::now().to_timespec().sec as usize;
+    let timestamp1 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() as usize;
     let code = auth.generate(30, timestamp1);
-    let timestamp2 = time::now().to_timespec().sec as usize;
+    let timestamp2 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() as usize;
     assert!(auth.verify(code, 30, timestamp2));
     assert!(!auth.verify(123456, 30, timestamp2));
     assert!(!auth.verify(1234567, 30, timestamp2));

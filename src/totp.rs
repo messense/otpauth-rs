@@ -3,18 +3,20 @@
 //! # Example
 //!
 //! ```
-//! extern crate otpauth;
-//! extern crate time;
+//! use std::time::{SystemTime, UNIX_EPOCH};
+//!
 //!
 //! fn main() {
 //!     let auth = otpauth::TOTP::new("python");
-//!     let timestamp1 = time::now().to_timespec().sec as usize;
+//!     let timestamp1 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() as usize;
 //!     let code = auth.generate(30, timestamp1);
-//!     let timestamp2 = time::now().to_timespec().sec as usize;
+//!     let timestamp2 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() as usize;
 //!     assert!(auth.verify(code, 30, timestamp2));
 //! }
 //! ```
-//!
+
+use base32::Alphabet::RFC4648;
+
 use super::hotp;
 
 
@@ -75,10 +77,7 @@ impl TOTP {
     ///
     /// ``issuer``: The company, the organization or something else.
     pub fn to_uri<S: AsRef<str>>(&self, label: S, issuer: S) -> String {
-        use base32::encode;
-        use base32::Alphabet::RFC4648;
-
-        let encoded_secret = encode(RFC4648 { padding: false }, self.secret.as_bytes());
+        let encoded_secret = base32::encode(RFC4648 { padding: false }, self.secret.as_bytes());
         format!("otpauth://totp/{}?secret={}&issuer={}",
                 label.as_ref(),
                 encoded_secret,

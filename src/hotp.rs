@@ -11,13 +11,12 @@
 //!     assert!(auth.verify(code, 0, 100));
 //! }
 //! ```
-//!
+
 use std::io::Cursor;
 
-use crypto::mac::Mac;
-use crypto::hmac::Hmac;
-use crypto::sha1::Sha1;
-use byteorder::{BigEndian, WriteBytesExt, ReadBytesExt};
+use byteorder::{BigEndian, ReadBytesExt};
+use base32::Alphabet::RFC4648;
+use ring::{digest, hmac};
 
 
 /// Two-step verfication of HOTP algorithm.
@@ -37,17 +36,10 @@ impl HOTP {
     ///
     /// ``counter``: HOTP is a counter based algorithm.
     pub fn generate(&self, counter: usize) -> u32 {
-        // Init Hmac
-        let key = self.secret.clone().into_bytes();
-        let mut hmac = Hmac::new(Sha1::new(), &key[..]);
-        // Calc msg
-        let mut wtr = vec![];
-        // supress warning about unused_must_use
-        let _ = wtr.write_u64::<BigEndian>(counter as u64);
-        hmac.input(&wtr[..]);
-        // Get digest
-        let result = hmac.result();
-        let digest = result.code();
+        let key = hmac::SigningKey::new(&digest::SHA1, self.secret.as_bytes());
+        let wtr = (counter as u64).to_be_bytes().to_vec();
+        let result = hmac::sign(&key, &wtr);
+        let digest = result.as_ref();
         let ob = digest[19];
         let pos: usize = (ob & 15) as usize;
         let mut rdr = Cursor::new(digest[pos..pos + 4].to_vec());
@@ -93,10 +85,8 @@ impl HOTP {
     ///
     /// ``counter``: Counter of the HOTP algorithm.
     pub fn to_uri<S: AsRef<str>>(&self, label: S, issuer: S, counter: usize) -> String {
-        use base32::encode;
-        use base32::Alphabet::RFC4648;
 
-        let encoded_secret = encode(RFC4648 { padding: false }, self.secret.as_bytes());
+        let encoded_secret = base32::encode(RFC4648 { padding: false }, self.secret.as_bytes());
         format!("otpauth://hotp/{}?secret={}&issuer={}&counter={}",
                 label.as_ref(),
                 encoded_secret,
