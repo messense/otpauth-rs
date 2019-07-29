@@ -23,7 +23,7 @@ use ring::hmac;
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct HOTP {
     /// A secret token for the authentication
-    pub secret: String,
+    secret: String,
 }
 
 impl HOTP {

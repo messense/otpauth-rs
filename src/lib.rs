@@ -42,8 +42,8 @@
 //! }
 //! ```
 
-pub mod hotp;
-pub mod totp;
+mod hotp;
+mod totp;
 
 pub use hotp::HOTP;
 pub use totp::TOTP;

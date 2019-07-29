@@ -24,7 +24,7 @@ use super::hotp;
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct TOTP {
     /// A secret token for the authentication
-    pub secret: String,
+    secret: String,
 }
 
 impl TOTP {
