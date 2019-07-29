@@ -16,7 +16,7 @@ use std::io::Cursor;
 
 use byteorder::{BigEndian, ReadBytesExt};
 use base32::Alphabet::RFC4648;
-use ring::{digest, hmac};
+use ring::hmac;
 
 
 /// Two-step verfication of HOTP algorithm.
@@ -36,7 +36,7 @@ impl HOTP {
     ///
     /// ``counter``: HOTP is a counter based algorithm.
     pub fn generate(&self, counter: u64) -> u32 {
-        let key = hmac::SigningKey::new(&digest::SHA1, self.secret.as_bytes());
+        let key = hmac::Key::new(hmac::HMAC_SHA1_FOR_LEGACY_USE_ONLY, self.secret.as_bytes());
         let wtr = counter.to_be_bytes().to_vec();
         let result = hmac::sign(&key, &wtr);
         let digest = result.as_ref();
