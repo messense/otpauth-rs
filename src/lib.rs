@@ -6,10 +6,8 @@
 //!
 //! ```toml
 //! [dependencies]
-//! otpauth = "0.2"
+//! otpauth = "0.3"
 //! ```
-//!
-//! Add ``extern crate otpauth`` to your crate root and your're good to go!
 //!
 //! # Examples
 //!
@@ -30,23 +28,19 @@
 //! ## TOTP example
 //!
 //! ```rust
-//! extern crate otpauth;
-//! extern crate time;
+//! use std::time::{SystemTime, UNIX_EPOCH};
 //!
 //! use otpauth::TOTP;
 //!
+//!
 //! fn main() {
 //!     let auth = TOTP::new("python");
-//!     let timestamp1 = time::now().to_timespec().sec as usize;
+//!     let timestamp1 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
 //!     let code = auth.generate(30, timestamp1);
-//!     let timestamp2 = time::now().to_timespec().sec as usize;
+//!     let timestamp2 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
 //!     assert_eq!(true, auth.verify(code, 30, timestamp2));
 //! }
 //! ```
-
-extern crate crypto;
-extern crate byteorder;
-extern crate base32;
 
 pub mod hotp;
 pub mod totp;
