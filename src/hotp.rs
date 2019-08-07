@@ -23,13 +23,18 @@ use ring::hmac;
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct HOTP {
     /// A secret token for the authentication
-    pub(crate) secret: Vec<u8>,
+    secret: Vec<u8>,
 }
 
 impl HOTP {
     /// Constructs a new `HOTP`
     pub fn new<S: Into<String>>(secret: S) -> HOTP {
         HOTP { secret: secret.into().into_bytes() }
+    }
+
+    pub fn from_base32<S: Into<String>>(secret: S) -> Option<HOTP> {
+        base32::decode(RFC4648 { padding: false }, &secret.into())
+            .map(|secret| HOTP { secret })
     }
 
     pub fn from_bytes(bytes: &[u8]) -> HOTP {
@@ -81,6 +86,10 @@ impl HOTP {
         false
     }
 
+    pub fn base32_secret(&self) -> String {
+        base32::encode(RFC4648 { padding: false }, &self.secret)
+    }
+
     /// Generate the otpauth protocal string.
     ///
     /// ``label``: Label of the identifier.
@@ -89,11 +98,9 @@ impl HOTP {
     ///
     /// ``counter``: Counter of the HOTP algorithm.
     pub fn to_uri<S: AsRef<str>>(&self, label: S, issuer: S, counter: u64) -> String {
-
-        let encoded_secret = base32::encode(RFC4648 { padding: false }, &self.secret);
         format!("otpauth://hotp/{}?secret={}&issuer={}&counter={}",
                 label.as_ref(),
-                encoded_secret,
+                self.base32_secret(),
                 issuer.as_ref(),
                 counter)
     }

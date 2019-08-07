@@ -15,8 +15,6 @@
 //! }
 //! ```
 
-use base32::Alphabet::RFC4648;
-
 use super::hotp::HOTP;
 
 
@@ -30,6 +28,11 @@ impl TOTP {
     /// Constructs a new `TOTP`
     pub fn new<S: Into<String>>(secret: S) -> TOTP {
         TOTP { hotp: HOTP::new(secret) }
+    }
+
+    pub fn from_base32<S: Into<String>>(secret: S) -> Option<TOTP> {
+        HOTP::from_base32(secret)
+            .map(|hotp| TOTP { hotp })
     }
 
     pub fn from_bytes(bytes: &[u8]) -> TOTP {
@@ -79,10 +82,9 @@ impl TOTP {
     ///
     /// ``issuer``: The company, the organization or something else.
     pub fn to_uri<S: AsRef<str>>(&self, label: S, issuer: S) -> String {
-        let encoded_secret = base32::encode(RFC4648 { padding: false }, &self.hotp.secret);
         format!("otpauth://totp/{}?secret={}&issuer={}",
                 label.as_ref(),
-                encoded_secret,
+                self.hotp.base32_secret(),
                 issuer.as_ref())
     }
 }
