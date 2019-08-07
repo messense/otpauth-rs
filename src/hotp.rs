@@ -23,20 +23,24 @@ use ring::hmac;
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct HOTP {
     /// A secret token for the authentication
-    secret: String,
+    pub(crate) secret: Vec<u8>,
 }
 
 impl HOTP {
     /// Constructs a new `HOTP`
     pub fn new<S: Into<String>>(secret: S) -> HOTP {
-        HOTP { secret: secret.into() }
+        HOTP { secret: secret.into().into_bytes() }
+    }
+
+    pub fn from_bytes(bytes: &[u8]) -> HOTP {
+        HOTP { secret: bytes.into() }
     }
 
     /// Generate a HOTP code.
     ///
     /// ``counter``: HOTP is a counter based algorithm.
     pub fn generate(&self, counter: u64) -> u32 {
-        let key = hmac::Key::new(hmac::HMAC_SHA1_FOR_LEGACY_USE_ONLY, self.secret.as_bytes());
+        let key = hmac::Key::new(hmac::HMAC_SHA1_FOR_LEGACY_USE_ONLY, &self.secret);
         let wtr = counter.to_be_bytes().to_vec();
         let result = hmac::sign(&key, &wtr);
         let digest = result.as_ref();
@@ -86,7 +90,7 @@ impl HOTP {
     /// ``counter``: Counter of the HOTP algorithm.
     pub fn to_uri<S: AsRef<str>>(&self, label: S, issuer: S, counter: u64) -> String {
 
-        let encoded_secret = base32::encode(RFC4648 { padding: false }, self.secret.as_bytes());
+        let encoded_secret = base32::encode(RFC4648 { padding: false }, &self.secret);
         format!("otpauth://hotp/{}?secret={}&issuer={}&counter={}",
                 label.as_ref(),
                 encoded_secret,
