@@ -32,11 +32,13 @@ impl HOTP {
         HOTP { secret: secret.into().into_bytes() }
     }
 
+    /// Constructs a new `HOTP` with base-32 encoded secret bytes
     pub fn from_base32<S: Into<String>>(secret: S) -> Option<HOTP> {
         base32::decode(RFC4648 { padding: false }, &secret.into())
             .map(|secret| HOTP { secret })
     }
 
+    /// Constructs a new `HOTP` with secret bytes
     pub fn from_bytes(bytes: &[u8]) -> HOTP {
         HOTP { secret: bytes.into() }
     }
@@ -86,6 +88,7 @@ impl HOTP {
         false
     }
 
+    /// Return the secret bytes in base32 encoding.
     pub fn base32_secret(&self) -> String {
         base32::encode(RFC4648 { padding: false }, &self.secret)
     }

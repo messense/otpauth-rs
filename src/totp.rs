@@ -30,11 +30,13 @@ impl TOTP {
         TOTP { hotp: HOTP::new(secret) }
     }
 
+    /// Constructs a new `TOTP` with base-32 encoded secret bytes
     pub fn from_base32<S: Into<String>>(secret: S) -> Option<TOTP> {
         HOTP::from_base32(secret)
             .map(|hotp| TOTP { hotp })
     }
 
+    /// Constructs a new `TOTP` with secret bytes
     pub fn from_bytes(bytes: &[u8]) -> TOTP {
         TOTP { hotp: HOTP::from_bytes(bytes) }
     }
@@ -74,6 +76,11 @@ impl TOTP {
             rv |= a ^ b;
         }
         rv == 0
+    }
+
+    /// Return the secret bytes in base32 encoding.
+    pub fn base32_secret(&self) -> String {
+        self.hotp.base32_secret()
     }
 
     /// Generate the otpauth protocal string.
