@@ -15,22 +15,30 @@
 //! }
 //! ```
 
-use base32::Alphabet::RFC4648;
-
-use super::hotp;
+use super::hotp::HOTP;
 
 
 /// Two-step verification of TOTP algorithm
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct TOTP {
-    /// A secret token for the authentication
-    secret: String,
+    hotp: HOTP,
 }
 
 impl TOTP {
     /// Constructs a new `TOTP`
     pub fn new<S: Into<String>>(secret: S) -> TOTP {
-        TOTP { secret: secret.into() }
+        TOTP { hotp: HOTP::new(secret) }
+    }
+
+    /// Constructs a new `TOTP` with base-32 encoded secret bytes
+    pub fn from_base32<S: Into<String>>(secret: S) -> Option<TOTP> {
+        HOTP::from_base32(secret)
+            .map(|hotp| TOTP { hotp })
+    }
+
+    /// Constructs a new `TOTP` with secret bytes
+    pub fn from_bytes(bytes: &[u8]) -> TOTP {
+        TOTP { hotp: HOTP::from_bytes(bytes) }
     }
 
     /// Generate a TOTP code.
@@ -42,8 +50,7 @@ impl TOTP {
     /// ``timestamp``: Create TOTP at this given timestamp
     pub fn generate(&self, period: u64, timestamp: u64) -> u32 {
         let counter = timestamp / period;
-        let hotp_auth = hotp::HOTP::new(&self.secret[..]);
-        hotp_auth.generate(counter)
+        self.hotp.generate(counter)
     }
 
     /// Valid a TOTP code.
@@ -71,16 +78,20 @@ impl TOTP {
         rv == 0
     }
 
+    /// Return the secret bytes in base32 encoding.
+    pub fn base32_secret(&self) -> String {
+        self.hotp.base32_secret()
+    }
+
     /// Generate the otpauth protocal string.
     ///
     /// ``label``: Label of the identifier.
     ///
     /// ``issuer``: The company, the organization or something else.
     pub fn to_uri<S: AsRef<str>>(&self, label: S, issuer: S) -> String {
-        let encoded_secret = base32::encode(RFC4648 { padding: false }, self.secret.as_bytes());
         format!("otpauth://totp/{}?secret={}&issuer={}",
                 label.as_ref(),
-                encoded_secret,
+                self.hotp.base32_secret(),
                 issuer.as_ref())
     }
 }
