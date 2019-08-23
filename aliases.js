@@ -1,0 +1,9 @@
+var ALIASES = {};
+ALIASES["base32"] = {};
+ALIASES["byteorder"] = {};
+ALIASES["lazy_static"] = {};
+ALIASES["libc"] = {};
+ALIASES["otpauth"] = {};
+ALIASES["ring"] = {};
+ALIASES["spin"] = {};
+ALIASES["untrusted"] = {};

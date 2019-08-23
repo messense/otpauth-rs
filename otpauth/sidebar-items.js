@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["HOTP","Two-step verfication of HOTP algorithm."],["TOTP","Two-step verification of TOTP algorithm"]]});
