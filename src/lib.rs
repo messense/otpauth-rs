@@ -18,11 +18,9 @@
 //!
 //! use otpauth::HOTP;
 //!
-//! fn main() {
-//!     let auth = HOTP::new("python");
-//!     let code = auth.generate(4);
-//!     assert_eq!(true, auth.verify(code, 0, 100));
-//! }
+//! let auth = HOTP::new("python");
+//! let code = auth.generate(4);
+//! assert_eq!(true, auth.verify(code, 0, 100));
 //! ```
 //!
 //! ## TOTP example
@@ -32,14 +30,11 @@
 //!
 //! use otpauth::TOTP;
 //!
-//!
-//! fn main() {
-//!     let auth = TOTP::new("python");
-//!     let timestamp1 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
-//!     let code = auth.generate(30, timestamp1);
-//!     let timestamp2 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
-//!     assert_eq!(true, auth.verify(code, 30, timestamp2));
-//! }
+//! let auth = TOTP::new("python");
+//! let timestamp1 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
+//! let code = auth.generate(30, timestamp1);
+//! let timestamp2 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
+//! assert_eq!(true, auth.verify(code, 30, timestamp2));
 //! ```
 
 mod hotp;
