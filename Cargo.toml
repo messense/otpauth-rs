@@ -9,11 +9,8 @@ name = "otpauth"
 readme = "README.md"
 repository = "https://github.com/messense/otpauth-rs"
 version = "0.4.1"
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 base32 = "0.5.1"
 ring = "0.17.8"
-
-[features]
-unstable = []

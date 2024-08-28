@@ -3,16 +3,12 @@
 //! # Example
 //!
 //! ```
-//! extern crate otpauth;
-//!
 //! fn main() {
 //!     let auth = otpauth::HOTP::new("python");
 //!     let code = auth.generate(4);
 //!     assert!(auth.verify(code, 0, 100));
 //! }
 //! ```
-
-use std::convert::TryInto;
 
 use base32::Alphabet::Rfc4648;
 use ring::hmac;
@@ -40,7 +36,9 @@ impl HOTP {
     /// Constructs a new `HOTP` with secret bytes
     #[must_use]
     pub fn from_bytes(bytes: &[u8]) -> HOTP {
-        HOTP { secret: bytes.into() }
+        HOTP {
+            secret: bytes.into(),
+        }
     }
 
     /// Generate a HOTP code.

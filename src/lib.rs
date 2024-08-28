@@ -6,7 +6,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! otpauth = "0.3"
+//! otpauth = "0.4"
 //! ```
 //!
 //! # Examples
@@ -14,8 +14,6 @@
 //! ## HOTP example
 //!
 //! ```rust
-//! extern crate otpauth;
-//!
 //! use otpauth::HOTP;
 //!
 //! let auth = HOTP::new("python");
