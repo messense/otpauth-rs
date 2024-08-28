@@ -6,7 +6,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! otpauth = "0.4"
+//! otpauth = "0.5"
 //! ```
 //!
 //! # Examples
