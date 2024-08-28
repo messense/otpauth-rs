@@ -33,3 +33,18 @@ fn test_to_uri_totp() {
     let expect = "otpauth://totp/python?secret=OB4XI2DPNY&issuer=python";
     assert_eq!(expect, auth.to_uri("python", "python"));
 }
+
+#[test]
+fn test_rfc4226() {
+    let auth = otpauth::HOTP::new("12345678901234567890");
+    assert_eq!(auth.generate(0), 755224);
+    assert_eq!(auth.generate(1), 287082);
+    assert_eq!(auth.generate(2), 359152);
+    assert_eq!(auth.generate(3), 969429);
+    assert_eq!(auth.generate(4), 338314);
+    assert_eq!(auth.generate(5), 254676);
+    assert_eq!(auth.generate(6), 287922);
+    assert_eq!(auth.generate(7), 162583);
+    assert_eq!(auth.generate(8), 399871);
+    assert_eq!(auth.generate(9), 520489);
+}
